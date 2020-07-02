@@ -251,12 +251,12 @@ public class TestController {
         //controller.runTD("17780677777", 1000, 2000);
 
         //controller.runGG("17780677777", 1000, 2000);
-        //controller.run("17780677777", 100, 70000);
+        controller.runMm("17780677777", 100, 70000);
 
         //controller.runTD("15708431920", 1000, 2000);
 
        //controller.runGG("15708431920", 1000, 2000);
-      controller.run("15846254785", 100, 70000);
+      //controller.run("15846254785", 100, 70000);
 
         //controller.runTD("17780677777", 1000, 70000);
         //controller.runTD("15708431920", 1000, 70000);
@@ -434,11 +434,13 @@ public class TestController {
 
                     String token = UUID.randomUUID().toString();
 
+                    String title = UUID.randomUUID().toString();
+
                     //把参数传进Map中
                     HashMap<String,String> params=new HashMap<>();
                     params.put("codeType","2");
                     params.put("mobilePhone","+86-"+phone);
-                    params.put("title",UUID.randomUUID().toString());
+                    params.put("title",title);
                     params.put("token",token);
                     params.put("userName",phone);
                     FormBody.Builder builder = new FormBody.Builder();
@@ -453,17 +455,17 @@ public class TestController {
                     String timestamp = System.currentTimeMillis() + "";
 
 
-                    String body = "{\"codeType\":2,\"mobilePhone\":\"+86-"+phone+"\",\"title\":\"找回密码\",\"token\":\""+token+"\",\"userName\":\""+phone+"\"}";
+                    String body = "{\"codeType\":2,\"mobilePhone\":\"+86-"+phone+"\",\"title\":\""+title+"\",\"token\":\""+token+"\",\"userName\":\""+phone+"\"}";
 
                     OkHttpClient okHttpClient=new OkHttpClient();
 
                     RequestBody formBody = RequestBody.create(MediaType.parse(body), body);
 
-                    Request request=new Request.Builder().url("https://gateway.ca-b2b.com/ca-user-provider/v1/source-open/reg/sendSMS")
-                            .addHeader("url","ca-user-provider/v1/source-open/reg/sendSMS")
+                    Request request=new Request.Builder().url("https://gateway.ca-b2b.com/ca-user-provider/source-open/sendPhoneCaptcha")
+                            .addHeader("url","ca-user-provider/source-open/sendPhoneCaptcha")
                             .addHeader("nonce",noce)
                             .addHeader("timestamp", timestamp)
-                            .addHeader("sign",getSign("ca-user-provider/v1/source-open/reg/sendSMS", body,noce, timestamp))
+                            .addHeader("sign",getSign("ca-user-provider/source-open/sendPhoneCaptcha", body,noce, timestamp))
                             .addHeader("Content-Type","application/json;charset=UTF-8")
                             .post(formBody).build();
 
